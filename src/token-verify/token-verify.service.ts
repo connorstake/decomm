@@ -1,8 +1,8 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { ethers } from 'ethers';
-import { ERC721 } from './ERC721';
-import { Account } from './Account';
 import { ConfigService } from '@nestjs/config';
+import { NFTOwnerhshipDetails } from './types/NftOwnershipDetailsType';
+import { IAccount } from './interfaces/IAccount';
 
 @Injectable()
 export class TokenVerifyService {
@@ -21,11 +21,9 @@ export class TokenVerifyService {
   }
 
   async verifyOwnership(
-    walletAddress: string,
-    contractAddress: string,
-  ): Promise<boolean> {
-    const nft = new ERC721(contractAddress);
-    const account = new Account(walletAddress, this.provider);
+    account: IAccount,
+    nft: INFT,
+  ): Promise<NFTOwnerhshipDetails> {
     const result = await account.holding(nft);
     return result;
   }

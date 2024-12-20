@@ -4,12 +4,17 @@ import { TokenVerifyService } from 'src/token-verify/token-verify.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { OwnershipCheckRequestDto } from './dto/ownershipCheckRequest.dto';
 import { OwnershipCheckResponseDto } from './dto/ownershipCheckResponse.dto';
+import { Account } from 'src/token-verify/Account';
+import { ERC721 } from 'src/token-verify/ERC721';
+import { ConfigService } from '@nestjs/config';
+import { JsonRpcApiProvider, JsonRpcProvider } from 'ethers';
 
 @Controller()
 export class EvmController {
   constructor(
     private readonly evmService: EvmService,
     private readonly tokenVerifyService: TokenVerifyService,
+    private readonly configService: ConfigService,
   ) {}
 
   @Get()
@@ -31,12 +36,14 @@ export class EvmController {
   async verifyOwnership(
     @Body() ownershipCheckRequestDto: OwnershipCheckRequestDto,
   ): Promise<OwnershipCheckResponseDto> {
-    const res = await this.tokenVerifyService.verifyOwnership(
+    const rpcUrl = this.configService.get<string>('MAINNET_RPC_URL');
+    const provider = new JsonRpcProvider(rpcUrl);
+    const account = new Account(
       ownershipCheckRequestDto.accountAddress,
-      ownershipCheckRequestDto.contractAddress,
+      provider,
     );
-    return {
-      owned: res,
-    };
+    const nft = new ERC721(ownershipCheckRequestDto.contractAddress);
+    const res = await this.tokenVerifyService.verifyOwnership(account, nft);
+    return res;
   }
 }
