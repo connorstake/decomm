@@ -5,6 +5,7 @@ import { INestApplication, Logger } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   initializeSwagger(app);
   await app.listen(3000);
 }
