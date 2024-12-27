@@ -1,9 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { GoogleService } from './strategies/google.strategy';
+import { User } from 'src/prisma/user/User';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private googleService: GoogleService) {}
+  constructor(
+    private googleService: GoogleService,
+    private user: User,
+    private prismaService: PrismaService,
+  ) {}
 
   async googleAuth(): Promise<{ url: string }> {
     return this.googleService.getOAuth2ClientUrl();
@@ -22,33 +28,26 @@ export class AuthService {
     accessToken: string,
   ): Promise<string> {
     // Check if the user exists
-    let user = await this.prismaService.user.findUnique({
-      where: { email },
-    });
+    const user = new User(email, '', '', '');
 
     if (!user) {
       // First-time sign-in: create new user
-      user = await this.prismaService.user.create({
-        data: {
-          email,
-          googleRefreshToken: refreshToken,
-          googleAccessToken: accessToken,
-          // Add other fields if necessary
-        },
-      });
+      await this.user.save(this.prismaService);
     } else {
       // Subsequent login: optionally update tokens
-      await this.prismaService.user.update({
-        where: { email },
-        data: {
-          googleRefreshToken: refreshToken,
-          googleAccessToken: accessToken,
-        },
-      });
+      //   await this.prismaService.user.update({
+      //     where: { email },
+      //     data: {
+      //       googleRefreshToken: refreshToken,
+      //       googleAccessToken: accessToken,
+      //     },
+      //   });
     }
 
     // Generate a JWT for the user
-    const payload = { email: user.email, sub: user.id };
-    return this.jwtService.sign(payload);
+    // const payload = { email: user.email, sub: user.id };
+    // return this.jwtService.sign(payload);
+
+    return 'done';
   }
 }
