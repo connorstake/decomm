@@ -27,4 +27,15 @@ export class TokenVerifyService {
     const result = await account.holding(nft);
     return result;
   }
+
+  async verifyMultipleOwnership(
+    account: IAccount,
+    nfts: INFT[],
+  ): Promise<NFTOwnerhshipDetails[]> {
+    const result = nfts.map((nft) => {
+      const holdingDetails = account.holding(nft);
+      return holdingDetails;
+    });
+    return await Promise.all(result);
+  }
 }

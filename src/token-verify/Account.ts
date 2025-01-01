@@ -11,11 +11,11 @@ export class Account implements IAccount {
     this.provider = provider;
   }
 
-  address(): string {
+  public address(): string {
     return this.accountAddress;
   }
 
-  async holding(nft: INFT): Promise<NFTOwnerhshipDetails> {
+  public async holding(nft: INFT): Promise<NFTOwnerhshipDetails> {
     const contract = new ethers.Contract(
       nft.collectionAddress(),
       nft.abi(),
@@ -26,6 +26,12 @@ export class Account implements IAccount {
     return {
       owned,
       amountOwned: Number(balance),
+      ids: await this.uniqueIds(),
+      contractAddress: nft.collectionAddress(),
     };
+  }
+
+  private async uniqueIds(): Promise<string[]> {
+    return [];
   }
 }

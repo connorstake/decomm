@@ -22,6 +22,8 @@ describe('TokenVerifyService', () => {
     const accountMock = new AccountMock('', new JsonRpcProvider(''), {
       owned: true,
       amountOwned: 1,
+      ids: ['test1'],
+      contractAddress: 'testContract',
     });
     const nftMock = new ERC721Mock('');
     const result = await service.verifyOwnership(accountMock, nftMock);
@@ -33,10 +35,30 @@ describe('TokenVerifyService', () => {
     const accountMock = new AccountMock('', new JsonRpcProvider(''), {
       owned: false,
       amountOwned: 0,
+      ids: [],
+      contractAddress: 'testContract',
     });
     const nftMock = new ERC721Mock('');
     const result = await service.verifyOwnership(accountMock, nftMock);
 
     expect(result.owned).toBe(false);
+  });
+
+  it('should return  NFTDetails for multiple NFTs', async () => {
+    const accountMock = new AccountMock('', new JsonRpcProvider(''), {
+      owned: true,
+      amountOwned: 1,
+      ids: ['test1'],
+      contractAddress: 'testContract',
+    });
+    const nftMock = new ERC721Mock('');
+    const result = await service.verifyMultipleOwnership(accountMock, [
+      nftMock,
+      nftMock,
+    ]);
+
+    expect(result.length).toBe(2);
+    expect(result[0].amountOwned).toBe(1);
+    expect(result[1].amountOwned).toBe(1);
   });
 });

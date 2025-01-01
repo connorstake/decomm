@@ -35,15 +35,22 @@ export class EvmController {
   @Post('owner')
   async verifyOwnership(
     @Body() ownershipCheckRequestDto: OwnershipCheckRequestDto,
-  ): Promise<OwnershipCheckResponseDto> {
+  ): Promise<OwnershipCheckResponseDto[]> {
     const rpcUrl = this.configService.get<string>('MAINNET_RPC_URL');
     const provider = new JsonRpcProvider(rpcUrl);
     const account = new Account(
       ownershipCheckRequestDto.accountAddress,
       provider,
     );
-    const nft = new ERC721(ownershipCheckRequestDto.contractAddress);
-    const res = await this.tokenVerifyService.verifyOwnership(account, nft);
+    const nfts = ownershipCheckRequestDto.contractAddresses.map(
+      (address: string) => {
+        return new ERC721(address);
+      },
+    );
+    const res = await this.tokenVerifyService.verifyMultipleOwnership(
+      account,
+      nfts,
+    );
     return res;
   }
 }

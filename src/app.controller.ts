@@ -12,11 +12,4 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-
-  @Post('user')
-  async signupUser(
-    @Body() userData: { name?: string; email: string },
-  ): Promise<void> {
-    // await this.userService.save(userData);
-  }
 }

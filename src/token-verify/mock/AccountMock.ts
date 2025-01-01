@@ -21,6 +21,7 @@ export class AccountMock implements IAccount {
     return this.accountAddress;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async holding(nft: INFT): Promise<NFTOwnerhshipDetails> {
     return this.mockHolding;
   }

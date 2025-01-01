@@ -8,8 +8,20 @@ export class OwnershipCheckRequestDto {
   accountAddress!: string;
 
   @ApiProperty({
-    example: '0x912845718dudh19d38dj8313d',
-    description: 'NFT Contract Address',
+    example: '["0x912845718dudh19d38dj8313d", "0x982j19228e91rj8dh" ]',
+    description: 'Array of NFT Contract Addresses',
   })
-  contractAddress!: string;
+  contractAddresses!: string[];
+
+  //   @ApiProperty({
+  //     example: '1',
+  //     description: 'the Unique chainID of the specified NFT collection',
+  //   })
+  //   chainId!: string;
+
+  //   @ApiProperty({
+  //     example: 'ERC721',
+  //     description: 'The token standard of the NFT collection',
+  //   })
+  //   tokenType!: string;
 }

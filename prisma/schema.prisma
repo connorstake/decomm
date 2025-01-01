@@ -14,12 +14,10 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(uuid()) // Unique identifier
-  email          String   @unique             // Email must be unique
-  name           String?                      // Optional name
-  profilePicture String?                      // Optional profile picture URL
-  provider       String                       // OAuth provider (e.g., "google")
-  providerId     String                       // Unique ID from the provider (e.g., Google ID)
-  createdAt      DateTime @default(now())     // When the user was created
-  updatedAt      DateTime @updatedAt          // When the user was last updated
+  id        String   @id @default(cuid()) // Unique identifier
+  email     String   @unique             // Email should be unique
+  name      String?                      // Optional name
+  createdAt DateTime @default(now())     // Automatically set the timestamp
+  updatedAt DateTime @updatedAt          // Automatically update on modifications
 }
+

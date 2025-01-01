@@ -66,8 +66,16 @@ export class GoogleService {
       auth: authClient,
     } as any);
 
-    const googleUserInfo = await googleAuth.userinfo.get();
-    const email = googleUserInfo.data.email!;
-    return { email, refreshToken, accessToken };
+    try {
+      const googleUserInfo = await googleAuth.userinfo.get();
+      const email = googleUserInfo.data.email!;
+      return { email, refreshToken, accessToken };
+    } catch (error) {
+      console.error(
+        'Error exchanging code for tokens:',
+        error.response?.data || error.message,
+      );
+      throw new Error('Failed to exchange authorization code for tokens');
+    }
   }
 }
