@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../prisma.service';
 import { User } from '../User';
+import { UserTable } from '../UserTable';
 
 describe('User Integration', () => {
   let prismaService: PrismaService;
@@ -17,12 +18,7 @@ describe('User Integration', () => {
 
   beforeEach(async () => {
     await prismaService.user.deleteMany();
-    user = new User(
-      `test-${Date.now()}@example.com`,
-      'Integration User',
-      'facebook',
-      '67890',
-    );
+    user = new User(`test-${Date.now()}@example.com`, 'Integration User');
   });
 
   afterAll(async () => {
@@ -31,11 +27,7 @@ describe('User Integration', () => {
   });
 
   it('should save the user to the database', async () => {
-    const spySave = jest.spyOn(user, 'save');
-
-    await user.save(prismaService);
-
-    expect(spySave).toHaveBeenCalledWith(prismaService);
+    await new UserTable(prismaService).save(user);
 
     // Optionally verify the data is persisted
     const savedUser = await prismaService.user.findUnique({
@@ -45,13 +37,11 @@ describe('User Integration', () => {
     expect(savedUser).toMatchObject({
       email: user.email(),
       name: 'Integration User',
-      provider: 'facebook',
-      providerId: '67890',
     });
   });
 
   it('should find a user by email', async () => {
-    await user.save(prismaService);
+    await new UserTable(prismaService).save(user);
     const foundUser = await user.userByEmail(prismaService);
     expect(foundUser).toBeTruthy();
     expect(foundUser?.email()).toBe(user.email());

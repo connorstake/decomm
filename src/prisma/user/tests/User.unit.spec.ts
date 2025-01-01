@@ -8,7 +8,7 @@ describe('User', () => {
 
   beforeEach(() => {
     prismaServiceMock = {} as PrismaService;
-    user = new User('test@example.com', 'Test User', 'google', '12345');
+    user = new User('test@example.com', 'Test User');
   });
 
   it('should return the correct email', () => {
@@ -17,13 +17,5 @@ describe('User', () => {
 
   it('should return the correct name', () => {
     expect(user.name()).toBe('Test User');
-  });
-
-  it('should return the correct provider', () => {
-    expect(user.provider()).toBe('google');
-  });
-
-  it('should return the correct providerId', () => {
-    expect(user.providerId()).toBe('12345');
   });
 });

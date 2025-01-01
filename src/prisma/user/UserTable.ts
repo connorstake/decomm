@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { User, Prisma } from '@prisma/client';
-import { IUserTable } from 'src/prisma/user/IUserTable';
+import { IUserTable } from 'src/prisma/user/interfaces/IUserTable';
+import { IUser } from './interfaces/IUser';
 
 @Injectable()
 export class UserTable implements IUserTable {
@@ -32,12 +33,19 @@ export class UserTable implements IUserTable {
     });
   }
 
-  async save(data: Prisma.UserCreateInput): Promise<void> {
+  async save(user: IUser): Promise<void> {
     try {
       await this.prisma.user.create({
-        data,
+        data: {
+          email: user.email(),
+          name: user.name(),
+        },
       });
     } catch (err) {
+      if (err.code === 'P2002' && err.meta?.target?.includes('email')) {
+        // Handle unique constraint violation
+        throw new Error(`User with email ${user.email()} already exists`);
+      }
       throw new Error(`Unable to save user due to: ${err}`);
     }
   }

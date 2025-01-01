@@ -1,5 +1,5 @@
 import { Controller, Get, Req, UnauthorizedException } from '@nestjs/common';
-import { UserTable } from 'src/prisma/user/UserTable';
+import { UserTable } from '../prisma/user/UserTable';
 
 @Controller('/user')
 export class UserController {

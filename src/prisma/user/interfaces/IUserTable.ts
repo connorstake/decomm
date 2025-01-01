@@ -1,4 +1,5 @@
 import { Prisma, User } from '@prisma/client';
+import { IUser } from './IUser';
 
 export interface IUserTable {
   user(userWhereUniqueInput: Prisma.UserWhereUniqueInput): Promise<User | null>;
@@ -9,7 +10,7 @@ export interface IUserTable {
     where?: Prisma.UserWhereInput;
     orderBy?: Prisma.UserOrderByWithRelationInput;
   }): Promise<User[]>;
-  save(data: Prisma.UserCreateInput): Promise<void>;
+  save(user: IUser): Promise<void>;
   update(params: {
     where: Prisma.UserWhereUniqueInput;
     data: Prisma.UserUpdateInput;

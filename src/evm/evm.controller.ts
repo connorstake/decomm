@@ -1,11 +1,11 @@
 import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { EvmService } from './evm.service';
-import { TokenVerifyService } from 'src/token-verify/token-verify.service';
+import { TokenVerifyService } from '../token-verify/token-verify.service';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { OwnershipCheckRequestDto } from './dto/ownershipCheckRequest.dto';
 import { OwnershipCheckResponseDto } from './dto/ownershipCheckResponse.dto';
-import { Account } from 'src/token-verify/Account';
-import { ERC721 } from 'src/token-verify/ERC721';
+import { Account } from '../token-verify/Account';
+import { ERC721 } from '../token-verify/ERC721';
 import { ConfigService } from '@nestjs/config';
 import { JsonRpcApiProvider, JsonRpcProvider } from 'ethers';
 

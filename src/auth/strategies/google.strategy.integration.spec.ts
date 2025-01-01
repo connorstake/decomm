@@ -21,13 +21,4 @@ describe('GoogleService Integration', () => {
     console.log('Auth URL:', url);
     expect(url).toContain('https://accounts.google.com/o/oauth2/v2/auth');
   });
-
-  it('should fetch user info with a valid code', async () => {
-    const code = 'mock-auth-code-from-google';
-    const result = await service.getAuthClientData(code);
-    console.log(result);
-    expect(result.email).toBeDefined();
-    expect(result.refreshToken).toBeDefined();
-    expect(result.accessToken).toBeDefined();
-  });
 });

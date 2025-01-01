@@ -17,7 +17,18 @@ model User {
   id        String   @id @default(cuid()) // Unique identifier
   email     String   @unique             // Email should be unique
   name      String?                      // Optional name
+  apiKeys   ApiKey[]    // One-to-many relationship with API keys
   createdAt DateTime @default(now())     // Automatically set the timestamp
   updatedAt DateTime @updatedAt          // Automatically update on modifications
 }
 
+
+model ApiKey {
+  id        String      @id @default(cuid())
+  userId    String      // Foreign key to User
+  user      User        @relation(fields: [userId], references: [id])
+  key       String      @unique // Unique key value
+  createdAt DateTime    @default(now())
+  revoked   Boolean     @default(false) // Indicates if the key is revoked
+  expiresAt DateTime?   // Optional expiration date
+}

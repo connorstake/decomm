@@ -1,5 +1,5 @@
 import { PrismaService } from '../prisma.service';
-import { IUser } from './IUser';
+import { IUser } from './interfaces/IUser';
 import { UserTable } from './UserTable';
 
 export class User implements IUser {
@@ -16,13 +16,6 @@ export class User implements IUser {
   }
   public name(): string {
     return this._name;
-  }
-
-  public async save(prismaService: PrismaService): Promise<void> {
-    await new UserTable(prismaService).save({
-      email: this.email(),
-      name: this.name(),
-    });
   }
 
   public async userByEmail(prismaService: PrismaService): Promise<User | null> {

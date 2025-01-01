@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { GoogleService } from './strategies/google.strategy';
-import { User } from 'src/prisma/user/User';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
   constructor(
     private googleService: GoogleService,
-    private user: User,
     private prismaService: PrismaService,
   ) {}
 
