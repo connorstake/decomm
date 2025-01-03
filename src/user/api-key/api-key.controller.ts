@@ -47,6 +47,6 @@ export class ApiKeyController {
     @Request() req: IUserRequest,
     @Param('keyId') keyId: string,
   ): Promise<void> {
-    return await new ApiKeyTable(this.prismaService).delete(req.userId, keyId);
+    return await new ApiKeyTable(this.prismaService).revoke(req.userId, keyId);
   }
 }

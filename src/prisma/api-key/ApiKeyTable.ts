@@ -19,16 +19,20 @@ export class ApiKeyTable implements IApiKeyTable {
     const apiKeys = await this.prismaService.apiKey.findMany({
       where: {
         userId,
+        revoked: false,
       },
     });
     return apiKeys.map((apiKey) => apiKey.key);
   }
 
-  async delete(userId: string, key: string): Promise<void> {
-    await this.prismaService.apiKey.delete({
+  async revoke(userId: string, key: string): Promise<void> {
+    await this.prismaService.apiKey.update({
       where: {
         key,
         userId,
+      },
+      data: {
+        revoked: true,
       },
     });
   }

@@ -37,8 +37,8 @@ export class AuthService {
     // Generate JWT
     const token = jwt.sign(
       { userId: user.id },
-      process.env.JWT_SECRET || 'secretjwttest', // Use a secure secret
-      { expiresIn: '1h' }, // Token expires in 1 hour
+      process.env.JWT_SECRET || 'secretjwttest',
+      { expiresIn: '24h' },
     );
 
     return token;

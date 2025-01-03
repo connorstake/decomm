@@ -60,4 +60,39 @@ describe('ApiKey Integration', () => {
 
     expect(foundApiKey).not.toBeNull();
   });
+
+  it('should delete the api key from the database', async () => {
+    const apiKeyTable = new ApiKeyTable(prismaService);
+
+    const user = new User(`12839128481@rmv.com`, 'Integration User');
+    const userTable = await new UserTable(prismaService);
+
+    let foundUser = await userTable.user({
+      email: user.email(),
+    });
+
+    if (!foundUser) {
+      await userTable.save(user);
+
+      foundUser = await userTable.user({
+        email: user.email(),
+      });
+    }
+
+    apiKey = ApiKeyFactory.new(foundUser!.id);
+    await apiKeyTable.save(apiKey);
+
+    const foundApiKey = await prismaService.apiKey.findFirst({
+      where: { key: apiKey.value() },
+    });
+
+    expect(foundApiKey).not.toBeNull();
+    expect(foundApiKey?.revoked).toBeFalsy();
+    await apiKeyTable.revoke(foundUser!.id, apiKey.value());
+
+    const updatedApiKey = await prismaService.apiKey.findFirst({
+      where: { key: apiKey.value() },
+    });
+    expect(updatedApiKey?.revoked).toBeTruthy();
+  });
 });
