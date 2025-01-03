@@ -18,7 +18,7 @@ function initializeSwagger(app: INestApplication) {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('TokenVerify')
     .setDescription(
-      'Tokinvoice is an API that provides information regarding the current holding status of accounts and NFTs',
+      'decomm is an API that provides information regarding the current holding status of accounts and NFTs',
     )
     .setVersion('1.0')
     .addServer('http://localhost:8080')
