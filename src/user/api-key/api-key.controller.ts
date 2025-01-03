@@ -1,10 +1,19 @@
-import { Controller, HttpCode, Post, Param, Get } from '@nestjs/common';
+import {
+  Controller,
+  HttpCode,
+  Post,
+  Param,
+  Get,
+  Delete,
+  Request,
+} from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import ApiKeyFactory from '../../prisma/api-key/ApiKeyFactory';
 import { ApiKeyTable } from '../../prisma/api-key/ApiKeyTable';
 import { PrismaService } from '../../prisma/prisma.service';
+import { IUserRequest } from '../../auth/interfaces/IUserRequest';
 
-@Controller('/user/:userId/key')
+@Controller('/user/key')
 export class ApiKeyController {
   constructor(private readonly prismaService: PrismaService) {}
 
@@ -13,8 +22,8 @@ export class ApiKeyController {
   })
   @HttpCode(201)
   @Post()
-  async createApiKey(@Param('userId') id: string): Promise<void> {
-    const apiKey = ApiKeyFactory.new(id);
+  async createApiKey(@Request() req: IUserRequest): Promise<void> {
+    const apiKey = ApiKeyFactory.new(req.userId);
     return await new ApiKeyTable(this.prismaService).save(apiKey);
   }
 
@@ -23,7 +32,21 @@ export class ApiKeyController {
   })
   @HttpCode(200)
   @Get()
-  async getApiKeys(@Param('userId') id: string): Promise<string[]> {
-    return await new ApiKeyTable(this.prismaService).apiKeysByUserId(id);
+  async getApiKeys(@Request() req: IUserRequest): Promise<string[]> {
+    return await new ApiKeyTable(this.prismaService).apiKeysByUserId(
+      req.userId,
+    );
+  }
+
+  @ApiOperation({
+    description: 'Deletes an API key for a user',
+  })
+  @HttpCode(200)
+  @Delete('/:keyId')
+  async deleteApiKey(
+    @Request() req: IUserRequest,
+    @Param('keyId') keyId: string,
+  ): Promise<void> {
+    return await new ApiKeyTable(this.prismaService).delete(req.userId, keyId);
   }
 }

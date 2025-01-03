@@ -23,4 +23,13 @@ export class ApiKeyTable implements IApiKeyTable {
     });
     return apiKeys.map((apiKey) => apiKey.key);
   }
+
+  async delete(userId: string, key: string): Promise<void> {
+    await this.prismaService.apiKey.delete({
+      where: {
+        key,
+        userId,
+      },
+    });
+  }
 }
