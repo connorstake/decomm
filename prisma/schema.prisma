@@ -31,4 +31,26 @@ model ApiKey {
   createdAt DateTime    @default(now())
   revoked   Boolean     @default(false) // Indicates if the key is revoked
   expiresAt DateTime?   // Optional expiration date
+
+  RequestLog RequestLog[]
+}
+
+
+model RequestLog {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+
+
+  userId     String?  
+
+  // If there is an API key
+  apiKeyId   String?
+  apiKey     ApiKey?  @relation(fields: [apiKeyId], references: [id])
+
+  // For anonymous users tracked by hashed IP
+  ipHash     String?   
+
+  // Store additional request data
+  endpoint   String
+  method     String
 }

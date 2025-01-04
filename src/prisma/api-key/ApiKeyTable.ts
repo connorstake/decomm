@@ -1,7 +1,10 @@
+import { ApiKey, User } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 import { IApiKey } from './interfaces/IApiKey';
 import { IApiKeyTable } from './interfaces/IApiKeyTable';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class ApiKeyTable implements IApiKeyTable {
   constructor(private readonly prismaService: PrismaService) {}
 
@@ -34,6 +37,32 @@ export class ApiKeyTable implements IApiKeyTable {
       data: {
         revoked: true,
       },
+    });
+  }
+
+  async keyHolder(key: string): Promise<User | null> {
+    const apiKey = await this.prismaService.apiKey.findUnique({
+      where: { key },
+    });
+
+    if (!apiKey) {
+      return null;
+    }
+
+    const user = await this.prismaService.user.findUnique({
+      where: { id: apiKey.userId },
+    });
+
+    if (!user) {
+      throw Error('User not found for API key: ' + key);
+    }
+
+    return user;
+  }
+
+  async infoByKey(key: string): Promise<ApiKey | null> {
+    return await this.prismaService.apiKey.findUnique({
+      where: { key },
     });
   }
 }

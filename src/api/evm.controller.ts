@@ -7,9 +7,9 @@ import { OwnershipCheckResponseDto } from './dto/ownershipCheckResponse.dto';
 import { Account } from '../token-verify/Account';
 import { ERC721 } from '../token-verify/ERC721';
 import { ConfigService } from '@nestjs/config';
-import { JsonRpcApiProvider, JsonRpcProvider } from 'ethers';
+import { JsonRpcProvider } from 'ethers';
 
-@Controller()
+@Controller('/api')
 export class EvmController {
   constructor(
     private readonly evmService: EvmService,
