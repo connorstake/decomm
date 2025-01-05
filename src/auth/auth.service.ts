@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { GoogleService } from './strategies/google.strategy';
 import { PrismaService } from '../prisma/prisma.service';
 import * as jwt from 'jsonwebtoken';
+import { SubscriptionType } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +31,7 @@ export class AuthService {
     // If user doesn't exist, create a new one
     if (!user) {
       user = await this.prismaService.user.create({
-        data: { email, name: '' },
+        data: { email, name: '', subscriptionType: SubscriptionType.STARTER },
       });
     }
 

@@ -14,6 +14,11 @@ export class UserController {
       throw new UnauthorizedException('User not found');
     }
 
-    return { email: user.email, name: user.name, id: userId };
+    return {
+      email: user.email,
+      name: user.name,
+      id: userId,
+      subscriptionType: user.subscriptionType,
+    };
   }
 }

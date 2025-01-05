@@ -16,7 +16,7 @@ export class TokenVerifyService {
   }
 
   setProvider() {
-    const rpcUrl = this.configService.get<string>('MAINNET_RPC_URL');
+    const rpcUrl = this.configService.get<string>('SEPOLIA_RPC_URL');
     this.provider = new ethers.JsonRpcProvider(rpcUrl);
   }
 

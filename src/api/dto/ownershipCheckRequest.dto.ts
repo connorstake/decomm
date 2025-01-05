@@ -13,11 +13,11 @@ export class OwnershipCheckRequestDto {
   })
   contractAddresses!: string[];
 
-  //   @ApiProperty({
-  //     example: '1',
-  //     description: 'the Unique chainID of the specified NFT collection',
-  //   })
-  //   chainId!: string;
+  @ApiProperty({
+    example: '1',
+    description: 'the Unique chainID of the specified NFT collection',
+  })
+  chainId!: string;
 
   //   @ApiProperty({
   //     example: 'ERC721',

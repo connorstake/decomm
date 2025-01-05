@@ -18,6 +18,7 @@ export class AuthMiddleware implements NestMiddleware {
       const decoded = jwt.verify(token, 'secretjwttest'); // Replace with your JWT secret
       req.user = decoded; // Attach user info to the request
       req.userId = (decoded as any).userId;
+      req.subscriptionType = (decoded as any).subscriptionType;
       console.log('DECODED', decoded);
       next();
     } catch (error) {

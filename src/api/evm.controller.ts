@@ -8,6 +8,7 @@ import { Account } from '../token-verify/Account';
 import { ERC721 } from '../token-verify/ERC721';
 import { ConfigService } from '@nestjs/config';
 import { JsonRpcProvider } from 'ethers';
+import { JsonRpcFactory } from 'src/token-verify/JsonRpcFactory';
 
 @Controller('/api')
 export class EvmController {
@@ -36,8 +37,11 @@ export class EvmController {
   async verifyOwnership(
     @Body() ownershipCheckRequestDto: OwnershipCheckRequestDto,
   ): Promise<OwnershipCheckResponseDto[]> {
-    const rpcUrl = this.configService.get<string>('MAINNET_RPC_URL');
-    const provider = new JsonRpcProvider(rpcUrl);
+    const provider = new JsonRpcFactory(
+      ownershipCheckRequestDto.chainId,
+      this.configService,
+    ).new();
+
     const account = new Account(
       ownershipCheckRequestDto.accountAddress,
       provider,

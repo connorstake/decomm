@@ -5,6 +5,7 @@ import { User } from '../../../prisma/user/User';
 import ApiKey from '../ApiKey';
 import { ApiKeyTable } from '../ApiKeyTable';
 import { UserTable } from '../../../prisma/user/UserTable';
+import { SubscriptionType } from '@prisma/client';
 
 describe('ApiKey Integration', () => {
   let prismaService: PrismaService;
@@ -33,7 +34,11 @@ describe('ApiKey Integration', () => {
   it('should save the api key to the database', async () => {
     const apiKeyTable = new ApiKeyTable(prismaService);
 
-    const user = new User(`12839128481@rmv.com`, 'Integration User');
+    const user = new User(
+      `12839128481@rmv.com`,
+      'Integration User',
+      SubscriptionType.STARTER,
+    );
     const userTable = await new UserTable(prismaService);
 
     let foundUser = await userTable.user({
@@ -64,7 +69,11 @@ describe('ApiKey Integration', () => {
   it('should delete the api key from the database', async () => {
     const apiKeyTable = new ApiKeyTable(prismaService);
 
-    const user = new User(`12839128481@rmv.com`, 'Integration User');
+    const user = new User(
+      `12839128481@rmv.com`,
+      'Integration User',
+      SubscriptionType.STARTER,
+    );
     const userTable = await new UserTable(prismaService);
 
     let foundUser = await userTable.user({

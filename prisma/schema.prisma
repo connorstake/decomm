@@ -20,7 +20,15 @@ model User {
   apiKeys   ApiKey[]    // One-to-many relationship with API keys
   createdAt DateTime @default(now())     // Automatically set the timestamp
   updatedAt DateTime @updatedAt          // Automatically update on modifications
+  subscriptionType SubscriptionType     // Enum type for subscription
 }
+
+enum SubscriptionType {
+  STARTER
+  PRO
+  ENTERPRISE
+}
+
 
 
 model ApiKey {

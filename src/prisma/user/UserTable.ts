@@ -39,6 +39,7 @@ export class UserTable implements IUserTable {
         data: {
           email: user.email(),
           name: user.name(),
+          subscriptionType: user.subscriptionType(),
         },
       });
     } catch (err) {
